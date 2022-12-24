@@ -1,0 +1,3 @@
+C:/gitProjects/yoav_roy_ass3_repo/cmake-build-debug/CMakeFiles/yoav_roy_ass3_repo.dir
+C:/gitProjects/yoav_roy_ass3_repo/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/gitProjects/yoav_roy_ass3_repo/cmake-build-debug/CMakeFiles/rebuild_cache.dir

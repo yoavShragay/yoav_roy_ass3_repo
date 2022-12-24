@@ -1,0 +1,9 @@
+# ninja log v5
+1	685	6935976754277460	CMakeFiles/yoav_roy_ass3_repo.dir/classifiedVector.cpp.obj	d948491ca8668c3
+6	861	6935976756061975	CMakeFiles/yoav_roy_ass3_repo.dir/distanceAlgo.cpp.obj	378e3b6f7ba61a68
+17	952	6935976756974555	CMakeFiles/yoav_roy_ass3_repo.dir/distances.cpp.obj	a60d899ddf7d8599
+30	1288	6935976760315805	CMakeFiles/yoav_roy_ass3_repo.dir/vectorsDataStruct.cpp.obj	1a8a3ce883467fae
+700	1300	6935976760469852	CMakeFiles/yoav_roy_ass3_repo.dir/vecComparator.cpp.obj	b52086e6b9c2888d
+10	1318	6935976760641902	CMakeFiles/yoav_roy_ass3_repo.dir/disVector.cpp.obj	3176c6cf35ad0f6a
+23	1481	6935976762273051	CMakeFiles/yoav_roy_ass3_repo.dir/main.cpp.obj	238597b44dd208e4
+1482	1710	6935976764538718	yoav_roy_ass3_repo.exe	d57208049c3fe04d

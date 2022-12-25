@@ -18,4 +18,4 @@ add_executable(yoav_roy_ass3_repo
         vecComparator.cpp
         vecComparator.h
         vectorsDataStruct.cpp
-        vectorsDataStruct.h)
+        vectorsDataStruct.h client.cpp client.h server.cpp)

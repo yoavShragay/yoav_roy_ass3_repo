@@ -18,16 +18,19 @@ using namespace std;
  */
 bool check_valid_part_ip(char *partIp) {
     size_t len = strlen(partIp);
-    // if the length is bigger than 3,
+    // if the length is bigger than 3, invalid input.
+    // if the length is 2 or 3 but the first char is 0 (e.g. 001 / 00), invalid input.
     if (len > 3 || (len > 1 && partIp[0] == '0')) {
         return false;
     }
+    // if the char in ascii is less than 0 or more than 9, invalid input
     for (int i = 0; i < len; i++) {
         if (partIp[i] < '0' || partIp[i] > '9') {
             return false;
         }
     }
     int num = stoi(partIp);
+    // if the number is between 0 and 255, it's a valid input
     if (num >= 0 && num <= 255) {
         return true;
     }
@@ -40,16 +43,20 @@ bool check_valid_part_ip(char *partIp) {
  * @return true of its a valid ip number, and false otherwise.
  */
 bool check_valid_ip(char *ip) {
+    // if the string is empty, invalid input
     if (ip == nullptr) {
         return false;
     }
     int count_dot = 0;
+    // parse the ip
     char *ipSplit = strtok(ip, DELIM);
     if (ipSplit == nullptr) {
         return false;
     }
     while (ipSplit) {
+        // check if the number is valid
         if (check_valid_part_ip(ipSplit)) {
+            // if so, continue to the next part - parse the remaining ip
             ipSplit = strtok(nullptr, DELIM);
             if (ipSplit != nullptr) {
                 count_dot++;
@@ -58,6 +65,7 @@ bool check_valid_ip(char *ip) {
             return false;
         }
     }
+    // if there are more than 3 dots, invalid input
     if (count_dot != 3) {
         return false;
     }
@@ -70,19 +78,24 @@ bool check_valid_ip(char *ip) {
  * @return true if this is a valid port number, false otherwise.
  */
 bool check_valid_port(char *port) {
+    // if the string is empty, invalid input
     if (port == nullptr) {
         return false;
     }
     size_t len = strlen(port);
+    // if the port is 0 or starting with a 0, invalid input
     if (port[0] == '0') {
         return false;
     }
+    // if the char in ascii is less than 0 or more than 9, invalid input
     for (int i = 0; i < len; ++i) {
         if (port[i] < '0' || port[i] > '9') {
             return false;
         }
     }
     int numPort = stoi(port);
+
+    // if the port not between 1024 and 65535, invalid input
     if (numPort < 1024 || numPort > 65536) {
         return false;
     }

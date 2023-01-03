@@ -252,12 +252,12 @@ bool check_valid_dis (string dis) {
  * @param userInput - a string of the user input (vector, distance, k)
  * @return if one of the parameters arent valid return false, return true otherwise
  */
-bool check_valid_user_input(string userInput) {
+bool check_valid_user_input(string userInput, int read_bytes) {
     bool flag = true;
     int last_index = userInput.find_last_of(' ');
     int first_index;
     // splitting the k parameter from user input
-    string k = userInput.substr(last_index + 1, userInput.length() - 1);
+    string k = userInput.substr(last_index + 1, read_bytes - last_index);
     // check if the k parameter is valid
     if (!checkNumber(k)) {
         return false;
@@ -267,7 +267,7 @@ bool check_valid_user_input(string userInput) {
         if (userInput[i] == ' ' && flag) {
             first_index = i;
             // splitting the vector parameter from the user input
-            string distance = userInput.substr(i + 1, last_index - 1);
+            string distance = userInput.substr(first_index + 1, last_index - (first_index + 1));
             // check if the distance parameter is valid
             if (!check_valid_dis(distance)) {
                 return false;
@@ -276,7 +276,7 @@ bool check_valid_user_input(string userInput) {
         }
     }
     // splitting the vector parameter from the user input
-    string vec = userInput.substr(0, first_index - 1);
+    string vec = userInput.substr(0, first_index);
     // check if the vector is valid
     string value;
     vector<double> newVec;

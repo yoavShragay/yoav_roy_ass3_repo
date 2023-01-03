@@ -29,7 +29,7 @@ void getUserVec(vector<classifiedVector> &allClassVec,
 
 bool check_valid_dis(string dis);
 
-bool check_valid_user_input(string userInput);
+bool check_valid_user_input(string userInput, int read_bytes);
 
 string getClassification(vector<classifiedVector> &allClassVec,
                          const string &distance, int neighborsNum, string stringVector);

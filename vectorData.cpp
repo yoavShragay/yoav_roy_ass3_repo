@@ -10,9 +10,9 @@ using namespace std;
  * @param vec
  * @param k
  */
-vectorData::vectorData(string distance,string vec,int k) {
-    this->distance = distance;
+vectorData::vectorData(string vec, string distance, int k) {
     this->vec = vec;
+    this->distance = distance;
     this->k = k;
 }
 /**

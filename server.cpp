@@ -11,6 +11,7 @@
 
 #include <bits/stdc++.h>
 #include "validations.h"
+#include "vectorData.h"
 
 using namespace std;
 
@@ -28,12 +29,43 @@ string convertToString(char *a, int size) {
     return s;
 }
 
+/**
+ *
+ * @param userInput
+ * @return
+ */
+vectorData createVecData(string userInput) {
+    bool flag = true;
+    int last_index = userInput.find_last_of(' ');
+    int first_index;
+    string distance;
+    // splitting the k parameter from user input
+    string k = userInput.substr(last_index + 1, userInput.length() - 1);
+    for (int i = last_index - 1; i >= 0; --i) {
+        // splitting the distance parameter from user input
+        if (userInput[i] == ' ' && flag) {
+            first_index = i;
+            // splitting the vector parameter from the user input
+            distance = userInput.substr(i + 1, last_index - 1);
+            // check if the distance parameter is valid
+            flag = false;
+        }
+    }
+    // splitting the vector parameter from the user input
+    string vec = userInput.substr(0, first_index - 1);
+    // check if the vector is valid
+    vectorData v = vectorData(vec, distance, stoi(k));
+    return v;
+}
+
+
 string classify(char *buffer, string file_name) {
     string userInput = convertToString(buffer, BUFFERSIZE);
-//    if (!check_valid_user_input(userInput)) {
-//        return ERROR;
-//    }
+    if (!check_valid_user_input(userInput)) {
+        return ERROR;
+    }
     vector<classifiedVector> allClassVec = fileToVec(file_name);
+    vectorData vecData = createVecData(userInput);
     //TODO - to seprate into vector distance and k
     //......
     //TODO - temp

@@ -1,8 +1,3 @@
-//
-// Created by yoav on 1/3/23.
-//
-
-#include "validations.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -55,19 +50,19 @@ bool checkBig(string num, int indexE) {
  * Checking if the string given is a proper number.
  * @param str the number
  */
-void checkNumber(string str) {
+bool checkNumber(string str) {
     bool pointFlag = true;
     int strLen = str.length();
     // case - only "." or only "-" or "." at the end or word to long
     if (str == "." || str == "-" || str[str.length() - 1] == '.'
         || str.length() >= 300) {
-        illegal();
+        return false;
     }
     for (int i = 0; i < strLen; i++) {
         // case - more than one point
         if (str[i] == '.') {
             if (!pointFlag) {
-                illegal();
+                return false;
             }
             pointFlag = false;
         } else if (i == 0 && str[i] == '-') {
@@ -77,32 +72,34 @@ void checkNumber(string str) {
         else if (!(isdigit(str[i]))) {
             // case - the number is big
             if (!checkBig(str, i)) {
-                illegal();
+                return false;
             }
             i++;
         }
     }
+    return true;
 }
 
 /**
  * checking if the spaces between the numbers are in the correct format
  * @param v the string given from the user
  */
-void checkSpaces(string vec) {
+bool checkSpaces(string vec) {
 
     if (vec.empty()) {
-        illegal();
+        return false;
     }
     for (int i = 0; i < vec.length(); i++) {
         if (vec[i] == ' ') {
             // case - " " at the beginning
-            if (i == 0) { illegal(); }
+            if (i == 0) { return false; }
             // case - too many " "
-            if (vec[i - 1] == ' ') { illegal(); }
+            if (vec[i - 1] == ' ') { return false; }
             // case - " " at the end
-            if (i == vec.length() - 1) { illegal(); }
+            if (i == vec.length() - 1) { return false; }
         }
     }
+    return true;
 }
 
 /**
@@ -118,8 +115,9 @@ vector<double> fillVectorByDelim(const string &strVec, char delim) {
     checkSpaces(strVec);
     stringstream str(strVec);
     while (getline(str, value, delim)) {
-        checkNumber(value);
-        newVec.push_back(stod(value));
+        if (checkNumber(value)) {
+            newVec.push_back(stod(value));
+        }
     }
     return newVec;
 }
@@ -216,7 +214,9 @@ void getUserVec(vector<classifiedVector> &allClassVec,
         freeMem(currentVec);
     }
 }
-string getClassification(vector<classifiedVector> &allClassVec,const string &distance, int neighborsNum,string stringVector) {
+
+string getClassification(vector<classifiedVector> &allClassVec, const string &distance, int neighborsNum,
+                         string stringVector) {
     // Convert from string vector to double vector
     vector<double> newVec = fillVectorByDelim(stringVector, ' ');
     // Check if the input vector is the same length as the file vectors
@@ -226,35 +226,95 @@ string getClassification(vector<classifiedVector> &allClassVec,const string &dis
     disVector currentVec(newVec, distance);
     vectorsDataStruct dataStr(currentVec, allClassVec);
     vector<classifiedVector> k_nearest = dataStr.getK(neighborsNum);
-    string k=getClass(k_nearest);
+    string k = getClass(k_nearest);
     // free the memory we allocated
     freeMem(currentVec);
     return k;
 }
 
 /**
- * checking the correctness of the values given at compilation
- * @param argv the array of values given at compilation
+ *
+ * @param dis
+ * @return
  */
-void checkArgv(char *argv[]) {
-    bool flag = false;
-    double num;
-    checkNumber(argv[1]);
-    //check if the number is natural
-    num = stod(argv[1]);
-    if ((floor(num) != ceil(num)) || num < 1) {
-        illegal();
-    }
+bool check_valid_dis (string dis) {
     vector<string> distances = {"AUC", "MAN", "CHB", "CAN", "MIN"};
     for (auto &distance: distances) {
-        if (argv[3] == distance) {
-            flag = true;
+        if (dis == distance) {
+            return true;
         }
     }
-    if (!flag) {
-        illegal();
-    }
+    return false;
 }
+
+/**
+ * This function gets a string of the user input, and checks the validation of every parameter
+ * @param userInput - a string of the user input (vector, distance, k)
+ * @return if one of the parameters arent valid return false, return true otherwise
+ */
+bool check_valid_user_input(string userInput) {
+    bool flag = true;
+    int last_index = userInput.find_last_of(' ');
+    int first_index;
+    // splitting the k parameter from user input
+    string k = userInput.substr(last_index + 1, userInput.length() - 1);
+    // check if the k parameter is valid
+    if (!checkNumber(k)) {
+        return false;
+    }
+    for (int i = last_index - 1; i >= 0; --i) {
+        // splitting the distance parameter from user input
+        if (userInput[i] == ' ' && flag) {
+            first_index = i;
+            // splitting the vector parameter from the user input
+            string distance = userInput.substr(i + 1, last_index - 1);
+            // check if the distance parameter is valid
+            if (!check_valid_dis(distance)) {
+                return false;
+            }
+            flag = false;
+        }
+    }
+    // splitting the vector parameter from the user input
+    string vec = userInput.substr(0, first_index - 1);
+    // check if the vector is valid
+    string value;
+    vector<double> newVec;
+    if (!checkSpaces(vec)) {
+        return false;
+    }
+    stringstream str(vec);
+    while (getline(str, value, ' ')) {
+        if (!checkNumber(value)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+///**
+// * checking the correctness of the values given at compilation
+// * @param argv the array of values given at compilation
+// */
+//void checkArgv(char *argv[]) {
+//    bool flag = false;
+//    double num;
+//    checkNumber(argv[1]);
+//    //check if the number is natural
+//    num = stod(argv[1]);
+//    if ((floor(num) != ceil(num)) || num < 1) {
+//        illegal();
+//    }
+//    vector<string> distances = {"AUC", "MAN", "CHB", "CAN", "MIN"};
+//    for (auto &distance: distances) {
+//        if (argv[3] == distance) {
+//            flag = true;
+//        }
+//    }
+//    if (!flag) {
+//        illegal();
+//    }
+//}
 
 //// This is the main function
 //int main2(int argc, char *argv[]) {

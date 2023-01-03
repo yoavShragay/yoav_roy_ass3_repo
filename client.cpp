@@ -1,4 +1,4 @@
-#include "client.h"
+#include "validations.h"
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -6,6 +6,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -96,18 +98,22 @@ bool check_valid_port(char *port) {
     int numPort = stoi(port);
 
     // if the port not between 1024 and 65535, invalid input
-    if (numPort < 1024 || numPort > 65536) {
+    if (numPort < 0 || numPort > 65536) {
         return false;
     }
     return true;
 }
 
-
-char *stringToCharArr(string s) {
-    char arr[s.length() + 1];
-    strcpy(arr, s.c_str());
-    return arr;
-}
+///**
+// *
+// * @param s
+// * @return
+// */
+//char *stringToCharArr(string s) {
+//    char arr[s.length() + 1];
+//    strcpy(arr, s.c_str());
+//    return arr;
+//}
 
 void sendVector(string ip, int port) {
     char ipArr[ip.length() + 1];
@@ -133,7 +139,10 @@ void sendVector(string ip, int port) {
         if (vectorData == "-1") {
             flag = true;
         }
-        int data_len = vectorData.length();
+//        if (!check_valid_user_input(vectorData)) {
+//            continue;
+//        }
+        size_t data_len = vectorData.length();
         char vectorArr[vectorData.length() + 1];
         strcpy(vectorArr, vectorData.c_str());
         int sent_bytes = send(sock, vectorArr, data_len, 0);
@@ -170,7 +179,7 @@ int main(int argc, char *argv[]) {
 //    }
     const string ip = "127.0.0.1";
     //const int server_port = stoi(argv[2]);
-    const int port_no = 12347;
+    const int port_no = 12344;
     sendVector(ip, port_no);
     return 0;
 }

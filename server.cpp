@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -12,8 +11,11 @@
 
 #include <bits/stdc++.h>
 #include "validations.h"
+
 using namespace std;
+
 #define BUFFERSIZE 4096
+#define ERROR "invalid input"
 
 // converts character array
 // to string and returns it
@@ -28,18 +30,19 @@ string convertToString(char *a, int size) {
 
 string classify(char *buffer, string file_name) {
     string userInput = convertToString(buffer, BUFFERSIZE);
+//    if (!check_valid_user_input(userInput)) {
+//        return ERROR;
+//    }
     vector<classifiedVector> allClassVec = fileToVec(file_name);
     //TODO - to seprate into vector distance and k
-    //TODO - create this fucttion: get(vector,ditance,k) return: classification
-    //TODO - convert back to char array
     //......
     //TODO - temp
 
-    string stringVector="1 2 3 4";
-    int k=5;
-    string distance = "AUC";
+    string stringVector = "1 2 3 4";
+    int k = 20;
+    string distance = "CHB";
     //......
-    string classification= getClassification(allClassVec,distance,k,stringVector);
+    string classification = getClassification(allClassVec, distance, k, stringVector);
     return classification;
 }
 
@@ -89,8 +92,11 @@ void acceptVector(int port, string file) {
                 }
                 cout << buffer;
             }
-            string tmpClassification=classify(buffer, file);
-            strcpy(buffer,tmpClassification.c_str());
+            string tmpClassification = classify(buffer, file);
+            if (tmpClassification == ERROR) {
+                break;
+            }
+            strcpy(buffer, tmpClassification.c_str());
 
             int sent_bytes = send(client_sock, buffer, read_bytes, 0);
             if (sent_bytes < 0) {

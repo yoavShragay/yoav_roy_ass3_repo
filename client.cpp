@@ -149,15 +149,15 @@ void sendVector(string ip, int port) {
 
 int main(int argc, char *argv[]) {
     //TODO - check if valid ip and port
-    if (!check_valid_ip(argv[1])) {
-        cout << "Invalid Input";
-    }
-    if (!check_valid_port(argv[2])) {
-        cout << "Invalid Input";
-    }
-    const string ip = argv[1];
-    const int server_port = stoi(argv[2]);
-    const int port_no = 12348;
+//    if (!check_valid_ip(argv[1])) {
+//        cout << "Invalid Input";
+//    }
+//    if (!check_valid_port(argv[2])) {
+//        cout << "Invalid Input";
+//    }
+    const string ip = "127.0.0.1";
+    //const int server_port = stoi(argv[2]);
+    const int port_no = 12347;
     sendVector(ip, port_no);
     return 0;
 }

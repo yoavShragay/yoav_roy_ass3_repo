@@ -34,47 +34,44 @@ string convertToString(char *a, int size) {
  * @param userInput
  * @return
  */
-vectorData createVecData(string userInput) {
+vectorData createVecData(string userInput, int read_bytes) {
     bool flag = true;
     int last_index = userInput.find_last_of(' ');
     int first_index;
     string distance;
     // splitting the k parameter from user input
-    string k = userInput.substr(last_index + 1, userInput.length() - 1);
+    string k = userInput.substr(last_index + 1, read_bytes - last_index);
     for (int i = last_index - 1; i >= 0; --i) {
         // splitting the distance parameter from user input
         if (userInput[i] == ' ' && flag) {
             first_index = i;
             // splitting the vector parameter from the user input
-            distance = userInput.substr(i + 1, last_index - 1);
+            distance = userInput.substr(i + 1, last_index - (first_index + 1));
             // check if the distance parameter is valid
             flag = false;
         }
     }
     // splitting the vector parameter from the user input
-    string vec = userInput.substr(0, first_index - 1);
+    string vec = userInput.substr(0, first_index);
     // check if the vector is valid
     vectorData v = vectorData(vec, distance, stoi(k));
     return v;
 }
 
 
-string classify(char *buffer, string file_name) {
-    string userInput = convertToString(buffer, BUFFERSIZE);
-    if (!check_valid_user_input(userInput)) {
+string classify(char *buffer, string file_name, int read_bytes) {
+    string userInput = convertToString(buffer, read_bytes);
+    if (!check_valid_user_input(userInput, read_bytes)) {
         return ERROR;
     }
     vector<classifiedVector> allClassVec = fileToVec(file_name);
-    vectorData vecData = createVecData(userInput);
+    vectorData vecData = createVecData(userInput, read_bytes);
     //TODO - to seprate into vector distance and k
     //......
     //TODO - temp
 
-    string stringVector = "1 2 3 4";
-    int k = 20;
-    string distance = "CHB";
-    //......
-    string classification = getClassification(allClassVec, distance, k, stringVector);
+    string classification = getClassification(allClassVec, vecData.getDistance(),
+                                              vecData.getK(), vecData.getVec());
     return classification;
 }
 
@@ -124,19 +121,18 @@ void acceptVector(int port, string file) {
                 }
                 cout << buffer;
             }
-            string tmpClassification = classify(buffer, file);
+            string tmpClassification = classify(buffer, file, read_bytes);
             if (tmpClassification == ERROR) {
                 break;
             }
             strcpy(buffer, tmpClassification.c_str());
 
-            int sent_bytes = send(client_sock, buffer, read_bytes, 0);
+            int sent_bytes = send(client_sock, buffer, tmpClassification.length() + 1, 0);
             if (sent_bytes < 0) {
                 perror("error sending to client");
             }
         }
     }
-    return;
 }
 
 int main(int argc, char *argv[]) {

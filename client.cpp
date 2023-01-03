@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
 //    }
     const string ip = "127.0.0.1";
     //const int server_port = stoi(argv[2]);
-    const int port_no = 12339;
+    const int port_no = 12324;
     sendVector(ip, port_no);
     return 0;
 }

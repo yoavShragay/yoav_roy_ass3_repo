@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
-
 project(yoav_roy_ass3_repo)
-set(CMAKE_CXX_STANDARD 11)
 
+set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 

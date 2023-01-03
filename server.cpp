@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -5,13 +6,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
-#include "main.cpp"
 
 // Demonstrates conversion
 // from character array to string
 
 #include <bits/stdc++.h>
-
+#include "validations.h"
 using namespace std;
 #define BUFFERSIZE 4096
 
@@ -26,13 +26,20 @@ string convertToString(char *a, int size) {
     return s;
 }
 
-char *classify(char *buffer, string file_name) {
-    char *classification = buffer;
+string classify(char *buffer, string file_name) {
     string userInput = convertToString(buffer, BUFFERSIZE);
     vector<classifiedVector> allClassVec = fileToVec(file_name);
     //TODO - to seprate into vector distance and k
     //TODO - create this fucttion: get(vector,ditance,k) return: classification
     //TODO - convert back to char array
+    //......
+    //TODO - temp
+
+    string stringVector="1 2 3 4";
+    int k=5;
+    string distance = "AUC";
+    //......
+    string classification= getClassification(allClassVec,distance,k,stringVector);
     return classification;
 }
 
@@ -82,7 +89,8 @@ void acceptVector(int port, string file) {
                 }
                 cout << buffer;
             }
-            strcpy(buffer, classify(buffer, file));
+            string tmpClassification=classify(buffer, file);
+            strcpy(buffer,tmpClassification.c_str());
 
             int sent_bytes = send(client_sock, buffer, read_bytes, 0);
             if (sent_bytes < 0) {

@@ -119,7 +119,9 @@ void connectionProblem(){
  * @param port - the port number
  */
 void sendVector(string ip, int port) {
-    char ipArr[ip.length() + 1];
+    cout <<ip<<endl;
+    cout << port <<endl;
+    char ipArr[ip.length()];
     strcpy(ipArr, ip.c_str());
     bool flag = false;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -132,6 +134,8 @@ void sendVector(string ip, int port) {
     sin.sin_addr.s_addr = inet_addr(ipArr);
     sin.sin_port = htons(port);
     if (connect(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
+        cout <<ip<<endl;
+        cout << port <<endl;
         perror("error connecting to server");
     }
 
@@ -185,6 +189,7 @@ void sendVector(string ip, int port) {
  * THis function is the main function in client
  */
 int main(int argc, char *argv[]) {
+    const string ip = argv[1];
     if (!check_valid_ip(argv[1])) {
         cout << "Invalid Input";
     }
@@ -192,7 +197,6 @@ int main(int argc, char *argv[]) {
         cout << "Invalid Input";
     }
 
-    const string ip=argv[1];
     const int port_no = stoi(argv[2]);
 
     sendVector(ip, port_no);

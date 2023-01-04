@@ -34,7 +34,6 @@ void vectorsDataStruct::updateDistances(vector<classifiedVector> &vectorsHeap) {
     }
 }
 
-//
 /**
  *get the vector at the requested index
  * @param index the requested index
@@ -44,7 +43,6 @@ classifiedVector vectorsDataStruct::at(int index) {
     return vectorsHeap.at(index);
 }
 
-//
 /**
  *get the k smallest vectors
  * @param k the amount of vectors

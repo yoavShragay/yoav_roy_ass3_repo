@@ -5,54 +5,55 @@
 using namespace std;
 
 /**
- *constructor
- * @param distance distance
- * @param vec vector
- * @param k k
+ * Constructor - creates an object that contains the user input parameters
+ * @param distance - distance
+ * @param vec - vector
+ * @param k - k
  */
 vectorData::vectorData(string vec, string distance, int k) {
     this->vec = vec;
     this->distance = distance;
     this->k = k;
 }
+
 /**
- *getter for Distance
+ * Getter for Distance
  */
 string vectorData::getDistance() {
     return this->distance;
 }
 
 /**
- *getter for the vector
+ * Getter for the vector
  */
 string vectorData::getVec(){
     return vec;
 }
 
 /**
- *getter for the k
+ * Getter for the k
  */
 int vectorData::getK(){
     return k;
 }
 
 /**
- *setter for the distance
+ * Setter for the distance
  */
 void vectorData::setDistance( string distance){
-    this->distance=distance;
+    this->distance = distance;
 }
 
 /**
- *setter vector
+ * Setter for vector
  */
 void vectorData::setVec(string vec){
-    this->vec=vec;
+    this->vec = vec;
 }
 
 /**
- *setter for the k
+ * Setter for the k
  */
 void vectorData::setK(int k){
-    this->k=k;
+    this->k = k;
 }

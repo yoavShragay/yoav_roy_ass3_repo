@@ -5,10 +5,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
-
-// Demonstrates conversion
-// from character array to string
-
 #include <bits/stdc++.h>
 #include "validations.h"
 #include "vectorData.h"
@@ -18,8 +14,12 @@ using namespace std;
 #define BUFFERSIZE 4096
 #define ERROR "invalid input"
 
-// converts character array
-// to string and returns it
+/**
+ * converts character array to string and returns it
+ * @param a the char array
+ * @param size size of the array
+ * @return the string
+ */
 string convertToString(char *a, int size) {
     int i;
     string s = "";
@@ -28,6 +28,7 @@ string convertToString(char *a, int size) {
     }
     return s;
 }
+
 
 /**
  *
@@ -57,50 +58,72 @@ vectorData createVecData(string userInput, int read_bytes) {
     vectorData v = vectorData(vec, distance, stoi(k));
     return v;
 }
-
+/**
+ * classifying the vector according to the arguments the user gave us
+ * @param buffer pointer to the start of array with the the information from the user
+ * @param file_name path to the file of the vectors
+ * @return
+ */
 
 string classify(char *buffer, string file_name, int read_bytes) {
+
     string userInput = convertToString(buffer, read_bytes);
     if (!check_valid_user_input(userInput, read_bytes)) {
         return ERROR;
     }
+    //getting the vectors from the file
     vector<classifiedVector> allClassVec = fileToVec(file_name);
+    //separating the user input to the different values
     vectorData vecData = createVecData(userInput, read_bytes);
-    //TODO - to seprate into vector distance and k
-    //......
-    //TODO - temp
-
+    //case - k is bigger that the amount of vectors in the file
+    if(allClassVec.size()<vecData.getK()){
+        return ERROR;
+    }
+    //getting the classification
     string classification = getClassification(allClassVec, vecData.getDistance(),
                                               vecData.getK(), vecData.getVec());
     return classification;
 }
-
+/**
+ * connecting to client
+ * @param sock the socket that the client going to be connected to
+ * @return the client socket
+ */
 int connectClient(int sock) {
     struct sockaddr_in client_sin;
     unsigned int addr_len = sizeof(client_sin);
     int client_sock = accept(sock, (struct sockaddr *) &client_sin, &addr_len);
     if (client_sock < 0) {
-        perror("error accepting client");
+       cout<<"error accepting client";
+       exit(1);
     }
     return client_sock;
 }
-
+/**
+ * accepting the vector from the client and returning the classification
+ * @param port the port
+ * @param file the file is going to be used for the classification
+ */
 void acceptVector(int port, string file) {
     bool flag = false;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-        perror("error creating socket");
+        cout<<"error creating socket";
+        exit(1);
     }
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
     sin.sin_port = htons(port);
+    //bind
     if (bind(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-        perror("error binding socket");
+        cout<<"error binding socket";
+        exit(1);
     }
     if (listen(sock, 5) < 0) {
-        perror("error listening to a socket");
+        cout<<"error listening to a socket";
+        exit(1);
     }
     while (true) {
         int client_sock = connectClient(sock);
@@ -110,26 +133,25 @@ void acceptVector(int port, string file) {
             int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
 
             if (read_bytes == 0) {
-                //TODO - find out waht to do here
-                // connection is closed
+                cout <<"connection is closed";
+                break;
             } else if (read_bytes < 0) {
-                //TODO - find out waht to do here
-                // error
+                cout <<"problem with connection";
+                break;
             } else {
                 if (strcmp(buffer, "-1") == 0) {
                     break;
                 }
-                cout << buffer;
             }
+            //classify
             string tmpClassification = classify(buffer, file, read_bytes);
-            if (tmpClassification == ERROR) {
-                break;
-            }
+            //converting to buffer
             strcpy(buffer, tmpClassification.c_str());
-
+            //sending to the client the classification
             int sent_bytes = send(client_sock, buffer, tmpClassification.length() + 1, 0);
             if (sent_bytes < 0) {
-                perror("error sending to client");
+                cout<<"error sending to client";
+                break;
             }
         }
     }

@@ -11,7 +11,7 @@
 #include "vectorsDataStruct.h"
 
 using namespace std;
-
+#define ERROR "invalid input"
 /**
  * Exit the program in case of an error
  */
@@ -151,7 +151,8 @@ vector<classifiedVector> fileToVec(string &file_name) {
             allClassVec.push_back(classVec);
         }
     } else {
-        illegal();
+       cout << "no such directory";
+       exit(1);
     }
     return allClassVec;
 }
@@ -221,7 +222,7 @@ string getClassification(vector<classifiedVector> &allClassVec, const string &di
     vector<double> newVec = fillVectorByDelim(stringVector, ' ');
     // Check if the input vector is the same length as the file vectors
     if (newVec.size() != allClassVec[0].getLen()) {
-        illegal();
+       return ERROR;
     }
     disVector currentVec(newVec, distance);
     vectorsDataStruct dataStr(currentVec, allClassVec);
@@ -258,6 +259,9 @@ bool check_valid_user_input(string userInput, int read_bytes) {
     int first_index;
     // splitting the k parameter from user input
     string k = userInput.substr(last_index + 1, read_bytes - last_index);
+    if(k.length()>10){
+        return false;
+    }
     // check if the k parameter is valid
     if (!checkNumber(k)) {
         return false;

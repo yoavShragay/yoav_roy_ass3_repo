@@ -175,7 +175,7 @@ void sendVector(string ip, int port) {
                 cout << ERROR << endl;
                 continue;
             }
-            cout << buffer;
+            cout << buffer << endl;
         }
     }
     close(sock);

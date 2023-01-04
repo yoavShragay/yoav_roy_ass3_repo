@@ -47,7 +47,7 @@ Otherwise, the message `invalid input` will be printed.
 The client runs in an infinite loop, and receives from the user an input as described above.  
 The client sends the information received from the user to the server.  
 The server is classified accordingly, and sends the classification to the client.  
-The client prints the received answer to the screen, on a separate line, and receives the next input from the user.
+The client prints the received answer to the screen, on a separate line, and receives the next input from the user.  
 If the user enters several inputs, the client must send these inputs over the same connection to the server,  
 and not on separate connections.  
 If the user enters the input -1, the client must close the connection to the server and close the program.  

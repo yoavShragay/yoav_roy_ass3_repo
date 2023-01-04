@@ -28,16 +28,16 @@ The program should run as follows: `./a.out k file distance`
   4) Distance Canberra - CAN
   5) Minkowski distance - MIN  
     
-  if one of the following happens than the program will close itself: 
-  the k is bigger the amount of vectors in the file
-  the path isnt right
-  the port or ip given to the client or tothe server is invalid  
+  if one of the following happens than the program will close itself:   
+  the k is bigger the amount of vectors in the file  
+  the path isnt right  
+  the port or ip given to the client or tothe server is invalid    
     
-  if one of the following happens than the client will send invalid input and will wait for the next input:
-  too many or too little vectors in comperison to the number that sould be in the file
-  the k is bigger than the intiger max value
-  any kind of incorrect string given by the user
-
+  if one of the following happens than the client will send invalid input and will wait for the next input:  
+  too many or too little vectors in comperison to the number that sould be in the file  
+  the k is bigger than the intiger max value  
+  any kind of incorrect string given by the user  
+  
 ### Implementation  
 
 

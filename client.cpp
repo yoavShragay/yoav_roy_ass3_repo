@@ -119,8 +119,6 @@ void connectionProblem(){
  * @param port - the port number
  */
 void sendVector(string ip, int port) {
-    cout <<ip<<endl;
-    cout << port <<endl;
     char ipArr[ip.length()];
     strcpy(ipArr, ip.c_str());
     bool flag = false;
@@ -134,8 +132,6 @@ void sendVector(string ip, int port) {
     sin.sin_addr.s_addr = inet_addr(ipArr);
     sin.sin_port = htons(port);
     if (connect(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-        cout <<ip<<endl;
-        cout << port <<endl;
         perror("error connecting to server");
     }
 

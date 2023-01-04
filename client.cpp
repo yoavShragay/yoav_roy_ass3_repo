@@ -141,7 +141,7 @@ void sendVector(string ip, int port) {
         string userInput;
         getline(cin, userInput);
         if (userInput == "-1") {
-            flag = true;
+            break;
         }
         // case - invalid input
         if (!check_valid_user_input(userInput, userInput.length())) {
@@ -154,9 +154,6 @@ void sendVector(string ip, int port) {
         int sent_bytes = send(sock, vectorArr, data_len, 0);
         if (sent_bytes < 0) {
             connectionProblem();
-            break;
-        }
-        if (flag) {
             break;
         }
 

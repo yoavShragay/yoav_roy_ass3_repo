@@ -1,17 +1,14 @@
+
 #ifndef YOAV_ROY_ASS3_REPO_VECTORDATA_H
 #define YOAV_ROY_ASS3_REPO_VECTORDATA_H
 
 #include "string"
-
 using namespace std;
-
 class vectorData {
-
 private:
     string distance;
     string vec;
     int k;
-
 public:
     vectorData(string vec, string distance, int k);
 

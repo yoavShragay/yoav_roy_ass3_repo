@@ -12,6 +12,7 @@
 using namespace std;
 
 #define DELIM "."
+#define ERROR "invalid input"
 
 /**
  * Check if every part of the ip (separated by a dot) is valid (e.g. 192.68.24.1)
@@ -114,6 +115,9 @@ bool check_valid_port(char *port) {
 //    strcpy(arr, s.c_str());
 //    return arr;
 //}
+void connectionProblem(){
+    cout<< "connection problem";
+}
 
 void sendVector(string ip, int port) {
     char ipArr[ip.length() + 1];
@@ -134,20 +138,24 @@ void sendVector(string ip, int port) {
 
     while (true) {
         //send
+        //getting the input from the user
         string vectorData;
         getline(cin, vectorData);
         if (vectorData == "-1") {
             flag = true;
         }
-//        if (!check_valid_user_input(vectorData)) {
-//            continue;
-//        }
+        //TODO - check valid
+        //case - invalid input
+        if (!check_valid_user_input(vectorData, vectorData.length())) {
+            continue;
+        }
         size_t data_len = vectorData.length();
         char vectorArr[vectorData.length() + 1];
         strcpy(vectorArr, vectorData.c_str());
         int sent_bytes = send(sock, vectorArr, data_len, 0);
         if (sent_bytes < 0) {
-            // error
+            connectionProblem();
+            break;
         }
         if (flag) {
             break;
@@ -158,10 +166,16 @@ void sendVector(string ip, int port) {
         int expected_data_len = sizeof(buffer);
         int read_bytes = recv(sock, buffer, expected_data_len, 0);
         if (read_bytes == 0) {
-            // connection is closed
+            connectionProblem();
+            break;
         } else if (read_bytes < 0) {
-            // error
+            connectionProblem();
+            break;
         } else {
+            if (strcmp(buffer,ERROR)==0){
+                cout << ERROR;
+                continue;
+            }
             cout << buffer;
         }
     }
@@ -171,15 +185,19 @@ void sendVector(string ip, int port) {
 
 int main(int argc, char *argv[]) {
     //TODO - check if valid ip and port
-//    if (!check_valid_ip(argv[1])) {
-//        cout << "Invalid Input";
-//    }
-//    if (!check_valid_port(argv[2])) {
-//        cout << "Invalid Input";
-//    }
-    const string ip = "127.0.0.1";
-    //const int server_port = stoi(argv[2]);
-    const int port_no = 12324;
+    if (!check_valid_ip(argv[1])) {
+        cout << "Invalid Input";
+    }
+    if (!check_valid_port(argv[2])) {
+        cout << "Invalid Input";
+    }
+
+    //const string ip = "127.0.0.1";
+    //const int port_no = 12345;
+
+    const string ip=argv[1];
+    const int port_no = stoi(argv[2]);
+
     sendVector(ip, port_no);
     return 0;
 }

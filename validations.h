@@ -24,9 +24,6 @@ vector<classifiedVector> fileToVec(string &file_name);
 
 string getClass(vector<classifiedVector> nearestVecs);
 
-void getUserVec(vector<classifiedVector> &allClassVec,
-                const string &distance, int neighborsNum);
-
 bool check_valid_dis(string dis);
 
 bool check_valid_user_input(string userInput, int read_bytes);

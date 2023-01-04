@@ -105,20 +105,19 @@ bool check_valid_port(char *port) {
     return true;
 }
 
-///**
-// *
-// * @param s
-// * @return
-// */
-//char *stringToCharArr(string s) {
-//    char arr[s.length() + 1];
-//    strcpy(arr, s.c_str());
-//    return arr;
-//}
+/**
+ * This function prints "connection problem"
+ */
 void connectionProblem(){
-    cout<< "connection problem";
+    cout << "connection problem";
 }
 
+/**
+ * This function connects between the server and the client
+ * Sends the user input to the server and getting the classification
+ * @param ip - the ip string
+ * @param port - the port number
+ */
 void sendVector(string ip, int port) {
     char ipArr[ip.length() + 1];
     strcpy(ipArr, ip.c_str());
@@ -137,21 +136,20 @@ void sendVector(string ip, int port) {
     }
 
     while (true) {
-        //send
-        //getting the input from the user
-        string vectorData;
-        getline(cin, vectorData);
-        if (vectorData == "-1") {
+        // send
+        // getting the input from the user
+        string userInput;
+        getline(cin, userInput);
+        if (userInput == "-1") {
             flag = true;
         }
-        //TODO - check valid
-        //case - invalid input
-        if (!check_valid_user_input(vectorData, vectorData.length())) {
+        // case - invalid input
+        if (!check_valid_user_input(userInput, userInput.length())) {
             continue;
         }
-        size_t data_len = vectorData.length();
-        char vectorArr[vectorData.length() + 1];
-        strcpy(vectorArr, vectorData.c_str());
+        size_t data_len = userInput.length();
+        char vectorArr[userInput.length() + 1];
+        strcpy(vectorArr, userInput.c_str());
         int sent_bytes = send(sock, vectorArr, data_len, 0);
         if (sent_bytes < 0) {
             connectionProblem();
@@ -161,7 +159,7 @@ void sendVector(string ip, int port) {
             break;
         }
 
-        //receive
+        // receive
         char buffer[4096] = "\0";
         int expected_data_len = sizeof(buffer);
         int read_bytes = recv(sock, buffer, expected_data_len, 0);
@@ -172,7 +170,7 @@ void sendVector(string ip, int port) {
             connectionProblem();
             break;
         } else {
-            if (strcmp(buffer,ERROR)==0){
+            if (strcmp(buffer,ERROR) == 0){
                 cout << ERROR;
                 continue;
             }
@@ -183,17 +181,16 @@ void sendVector(string ip, int port) {
     return;
 }
 
+/**
+ * THis function is the main function in client
+ */
 int main(int argc, char *argv[]) {
-    //TODO - check if valid ip and port
     if (!check_valid_ip(argv[1])) {
         cout << "Invalid Input";
     }
     if (!check_valid_port(argv[2])) {
         cout << "Invalid Input";
     }
-
-    //const string ip = "127.0.0.1";
-    //const int port_no = 12345;
 
     const string ip=argv[1];
     const int port_no = stoi(argv[2]);

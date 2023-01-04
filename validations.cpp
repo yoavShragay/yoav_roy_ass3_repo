@@ -10,8 +10,10 @@
 #include "classifiedVector.h"
 #include "vectorsDataStruct.h"
 
-using namespace std;
 #define ERROR "invalid input"
+
+using namespace std;
+
 /**
  * Exit the program in case of an error
  */
@@ -151,8 +153,8 @@ vector<classifiedVector> fileToVec(string &file_name) {
             allClassVec.push_back(classVec);
         }
     } else {
-       cout << "no such directory";
-       exit(1);
+        cout << "no such directory";
+        exit(1);
     }
     return allClassVec;
 }
@@ -187,42 +189,19 @@ string getClass(vector<classifiedVector> nearestVecs) {
 
 /**
  * Getting input from user and printing the classification
- * depends on the k nearest vectors
- * The program end when the user write 'EXIT'
  * @param allClassVec - vector that contains all classified vectors
  * @param distance - string that represents the distance function
  * @param neighborsNum - number of neighbors to check from
+ * @param stringVector - string that represents the user input vector
+ * @return the classification according to the user input
  */
-void getUserVec(vector<classifiedVector> &allClassVec,
-                const string &distance, int neighborsNum) {
-    while (true) {
-        string stringVector;
-        getline(cin, stringVector);
-        if (stringVector == "EXIT") {
-            break;
-        }
-        // Convert from string vector to double vector
-        vector<double> newVec = fillVectorByDelim(stringVector, ' ');
-        // Check if the input vector is the same length as the file vectors
-        if (newVec.size() != allClassVec[0].getLen()) {
-            illegal();
-        }
-        disVector currentVec(newVec, distance);
-        vectorsDataStruct dataStr(currentVec, allClassVec);
-        vector<classifiedVector> k_nearest = dataStr.getK(neighborsNum);
-        cout << getClass(k_nearest) << endl;
-        // free the memory we allocated
-        freeMem(currentVec);
-    }
-}
-
 string getClassification(vector<classifiedVector> &allClassVec, const string &distance, int neighborsNum,
                          string stringVector) {
     // Convert from string vector to double vector
     vector<double> newVec = fillVectorByDelim(stringVector, ' ');
     // Check if the input vector is the same length as the file vectors
     if (newVec.size() != allClassVec[0].getLen()) {
-       return ERROR;
+        return ERROR;
     }
     disVector currentVec(newVec, distance);
     vectorsDataStruct dataStr(currentVec, allClassVec);
@@ -234,11 +213,11 @@ string getClassification(vector<classifiedVector> &allClassVec, const string &di
 }
 
 /**
- *
- * @param dis
- * @return
+ * This function checks of the distance is correct
+ * @param dis - string that represents a distance function
+ * @return - true if the input is valid, false otherwise
  */
-bool check_valid_dis (string dis) {
+bool check_valid_dis(string dis) {
     vector<string> distances = {"AUC", "MAN", "CHB", "CAN", "MIN"};
     for (auto &distance: distances) {
         if (dis == distance) {
@@ -259,7 +238,7 @@ bool check_valid_user_input(string userInput, int read_bytes) {
     int first_index;
     // splitting the k parameter from user input
     string k = userInput.substr(last_index + 1, read_bytes - last_index);
-    if(k.length()>10){
+    if (k.length() > 10) {
         return false;
     }
     // check if the k parameter is valid
@@ -295,46 +274,3 @@ bool check_valid_user_input(string userInput, int read_bytes) {
     }
     return true;
 }
-
-///**
-// * checking the correctness of the values given at compilation
-// * @param argv the array of values given at compilation
-// */
-//void checkArgv(char *argv[]) {
-//    bool flag = false;
-//    double num;
-//    checkNumber(argv[1]);
-//    //check if the number is natural
-//    num = stod(argv[1]);
-//    if ((floor(num) != ceil(num)) || num < 1) {
-//        illegal();
-//    }
-//    vector<string> distances = {"AUC", "MAN", "CHB", "CAN", "MIN"};
-//    for (auto &distance: distances) {
-//        if (argv[3] == distance) {
-//            flag = true;
-//        }
-//    }
-//    if (!flag) {
-//        illegal();
-//    }
-//}
-
-//// This is the main function
-//int main2(int argc, char *argv[]) {
-//    string distance, file_name;
-//
-//    // accepting from user input
-//    checkArgv(argv);
-//    int neighborsNum = stoi(argv[1]);
-//    file_name = argv[2];
-//    distance = argv[3];
-//
-//    // Put each line in the file into a vector that contains string vectors
-//    // One string vector represents one line in the file
-//    vector<classifiedVector> allClassVec = fileToVec(file_name);
-//
-//    // Print the k closest neighbors to the input vector
-//    getUserVec(allClassVec, distance, neighborsNum);
-//    return 0;
-//}

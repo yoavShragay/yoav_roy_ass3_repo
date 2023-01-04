@@ -187,9 +187,11 @@ int main(int argc, char *argv[]) {
     //TODO - check if valid ip and port
     if (!check_valid_ip(argv[1])) {
         cout << "Invalid Input";
+        exit(1);
     }
     if (!check_valid_port(argv[2])) {
         cout << "Invalid Input";
+        exit(1);
     }
 
     //const string ip = "127.0.0.1";

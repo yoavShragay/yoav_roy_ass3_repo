@@ -149,6 +149,7 @@ void sendVector(string ip, int port) {
         }
         // case - invalid input
         if (!check_valid_user_input(userInput, userInput.length())) {
+            cout << "Invalid Input" << endl;
             continue;
         }
         size_t data_len = userInput.length();
@@ -174,8 +175,8 @@ void sendVector(string ip, int port) {
             connectionProblem();
             break;
         } else {
-            if (strcmp(buffer,ERROR) == 0){
-                cout << ERROR;
+            if (strcmp(buffer, ERROR) == 0){
+                cout << ERROR << endl;
                 continue;
             }
             cout << buffer;

@@ -98,8 +98,8 @@ bool check_valid_port(char *port) {
     }
     int numPort = stoi(port);
 
-    // if the port not between 1024 and 65535, invalid input
-    if (numPort < 0 || numPort > 65536) {
+    // if the port not between 0 and 65535, invalid input
+    if (numPort < 0 || numPort > 65535) {
         return false;
     }
     return true;
@@ -109,7 +109,7 @@ bool check_valid_port(char *port) {
  * This function prints "connection problem"
  */
 void connectionProblem(){
-    cout << "connection problem";
+    cout << "connection problem" << endl;
 }
 
 /**
@@ -191,10 +191,12 @@ void sendVector(string ip, int port) {
 int main(int argc, char *argv[]) {
     const string ip = argv[1];
     if (!check_valid_ip(argv[1])) {
-        cout << "Invalid Input";
+        cout << "Invalid Input" << endl;
+        exit(1);
     }
     if (!check_valid_port(argv[2])) {
-        cout << "Invalid Input";
+        cout << "Invalid Input" << endl;
+        exit(1);
     }
 
     const int port_no = stoi(argv[2]);

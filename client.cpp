@@ -144,7 +144,7 @@ void sendVector(string ip, int port) {
             flag = true;
         }
         // case - invalid input
-        if (!check_valid_user_input(userInput, userInput.length())) {
+        else if (!check_valid_user_input(userInput, userInput.length())) {
             cout << "Invalid Input" << endl;
             continue;
         }

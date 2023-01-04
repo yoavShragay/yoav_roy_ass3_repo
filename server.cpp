@@ -15,6 +15,36 @@
 using namespace std;
 
 /**
+ * Check if the port is a valid number
+ * @param port - port number
+ * @return true if this is a valid port number, false otherwise.
+ */
+bool check_valid_port(char *port) {
+    // if the string is empty, invalid input
+    if (port == nullptr) {
+        return false;
+    }
+    size_t len = strlen(port);
+    // if the port is 0 or starting with a 0, invalid input
+    if (port[0] == '0') {
+        return false;
+    }
+    // if the char in ascii is less than 0 or more than 9, invalid input
+    for (int i = 0; i < len; ++i) {
+        if (port[i] < '0' || port[i] > '9') {
+            return false;
+        }
+    }
+    int numPort = stoi(port);
+
+    // if the port not between 0 and 65535, invalid input
+    if (numPort < 0 || numPort > 65535) {
+        return false;
+    }
+    return true;
+}
+
+/**
  * converts character array to string and returns it
  * @param a the char array
  * @param size size of the array
@@ -93,7 +123,7 @@ int connectClient(int sock) {
     unsigned int addr_len = sizeof(client_sin);
     int client_sock = accept(sock, (struct sockaddr *) &client_sin, &addr_len);
     if (client_sock < 0) {
-        cout << "error accepting client";
+        cout << "error accepting client" << endl;
         exit(1);
     }
     return client_sock;
@@ -108,7 +138,7 @@ void acceptVector(int port, string file) {
     bool flag = false;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-        cout << "error creating socket";
+        cout << "error creating socket" << endl;
         exit(1);
     }
     struct sockaddr_in sin;
@@ -118,11 +148,11 @@ void acceptVector(int port, string file) {
     sin.sin_port = htons(port);
     //bind
     if (bind(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-        cout << "error binding socket";
+        cout << "error binding socket" << endl;
         exit(1);
     }
     if (listen(sock, 5) < 0) {
-        cout << "error listening to a socket";
+        cout << "error listening to a socket" << endl;
         exit(1);
     }
     while (true) {
@@ -133,10 +163,10 @@ void acceptVector(int port, string file) {
             int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
 
             if (read_bytes == 0) {
-                cout << "connection is closed";
+                cout << "connection is closed" << endl;
                 break;
             } else if (read_bytes < 0) {
-                cout << "problem with connection";
+                cout << "problem with connection" << endl;
                 break;
             } else {
                 if (strcmp(buffer, "-1") == 0) {
@@ -150,7 +180,7 @@ void acceptVector(int port, string file) {
             // sending the classification to the client
             int sent_bytes = send(client_sock, buffer, tmpClassification.length() + 1, 0);
             if (sent_bytes < 0) {
-                cout << "error sending to client";
+                cout << "error sending to client" << endl;
                 break;
             }
         }
@@ -162,7 +192,10 @@ void acceptVector(int port, string file) {
  */
 int main(int argc, char *argv[]) {
     const string file_name = argv[1];
-    //TODO - check if leagel number
+    if (!check_valid_port(argv[2])) {
+        cout << "Invalid Input" << endl;
+        exit(1);
+    }
     const int server_port = stoi(argv[2]);
     acceptVector(server_port, file_name);
     return 0;

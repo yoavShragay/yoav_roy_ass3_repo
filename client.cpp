@@ -51,6 +51,15 @@ bool check_valid_ip(char *ip) {
         return false;
     }
     int count_dot = 0;
+    for (int i = 0; i < strlen(ip); ++i) {
+        if (ip[i] == '.') {
+            count_dot++;
+        }
+    }
+    // if there are more than 3 dots, invalid input
+    if (count_dot != 3) {
+        return false;
+    }
     // parse the ip
     char *ipSplit = strtok(ip, DELIM);
     if (ipSplit == nullptr) {
@@ -61,16 +70,9 @@ bool check_valid_ip(char *ip) {
         if (check_valid_part_ip(ipSplit)) {
             // if so, continue to the next part - parse the remaining ip
             ipSplit = strtok(nullptr, DELIM);
-            if (ipSplit != nullptr) {
-                count_dot++;
-            }
         } else {
             return false;
         }
-    }
-    // if there are more than 3 dots, invalid input
-    if (count_dot != 3) {
-        return false;
     }
     return true;
 }
